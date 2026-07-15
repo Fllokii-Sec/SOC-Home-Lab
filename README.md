@@ -1,13 +1,11 @@
 # Soc Home Lab
 
 ## Objective
-[Brief Objective - Remove this afterwards]
 
 This project demonstrates the design, deployment, and validation of a localized Security Operations Center (SOC) home lab ecosystem. The primary objective was to show you can build a comprehensive telemetry catchment architecture to aggregate endpoint logs, network events, and signature-based Intrusion Detection System (IDS) alerts into a centralized SIEM platform for analysis and security orchestration with open-source tools, with the enhancement of Virus Total and file integrity monitoring for even more detection capabilities.
 
 
 ### Skills Learned
-[Bullet Points - Remove this afterwards]
 
 - Advanced understanding of SIEM concepts and practical application.
 - Proficiency in analyzing and interpreting network logs.
@@ -16,7 +14,6 @@ This project demonstrates the design, deployment, and validation of a localized 
 - Development of critical thinking and problem-solving skills in cybersecurity.
 
 ### Tools Used
-[Bullet Points - Remove this afterwards]
 
 - Security Information and Event Management (SIEM) system for log ingestion and analysis.
 - PFsense for Edge firewalling, network isolation, and perimeter access logging.
@@ -129,20 +126,29 @@ Fig. 12
 
 The "Why": Security teams cannot manually triage every unknown file hash. Automating lookup rules allows the SIEM to instantly escalate alerts to Critical or High severity if a running process matches a known malicious entity in the wild.
 
-Step 6. Attcking The Windows Vivtim
+Step 6. Attcking The Windows Victim
  - Used Kali Linux to launch a brute Force Attack against victim vm. (see fig. 13)
 
 <img width="994" height="798" alt="vmware_1fvH3Vr08f" src="https://github.com/user-attachments/assets/a1b04085-db32-44e3-9269-d78cea6a70ee" />
 
 Fig. 13
 
- - Watched Wazuh to Detect and Analyze Alerts. (see fig. 14)
+ - Observed Wazuh to Detect and Analyze Alerts. (see fig. 14)
 
 <img width="1827" height="728" alt="vmware_hcQBESjbeV" src="https://github.com/user-attachments/assets/dcbeeba0-a88e-4e82-a655-c4775207489f" />
 
 <img width="1799" height="543" alt="vmware_8CY8GfgPyu" src="https://github.com/user-attachments/assets/a53cdc24-70ba-45b4-b4c5-98e5563b33df" />
 
-Fig. 14
+Fig.14
+
+Key Takeaways & Security Mindset Acquired
+ - Visibility is Nothing Without Context: Collecting logs from pfSense or Windows independently provides a fractured narrative. True detection capability was realized when correlating the network event (Suricata/pfSense alerting on high-volume SSH connections) with the host event (Windows reporting rapid credential failures).
+  
+ - The Attacker's Advantage vs. Defender's Strategy: Simulating the attack via Kali reinforced how noisy automated brute-force tools are. As a defender, mapping these actions directly to the MITRE ATT&CK Framework (T1110 - Brute Force) allows for targeted, proactive defense strategies rather than reactive firefighting.
+
+ - Open Source Security: How Open Source Tools not only can be a viable option for security and monitoring, but also a good source to get hands on practical skills in an isolated home enviroment to continue learning and becoming more knowlegable how ceartain fundementals tie together.
+
+
 
 
 
