@@ -25,13 +25,6 @@ This project demonstrates the design, deployment, and validation of a localized 
 - VirusTotal for Automated file hash reputation lookup and analysis orchestration.
 
 ## Steps
-drag & drop screenshots here or use imgur and reference them using imgsrc
-
-Every screenshot should have some text explaining what the screenshot is about.
-
-Example below.
-
-*Ref 1: Network Diagram*
 
 Step 1: SIEM Management Setup (Ubuntu Server)
 Objective: Establish a highly stable, hardened log aggregation and analysis engine.
@@ -53,6 +46,7 @@ Implementation:
  - Integrate with Wazuh (agent conf file fig.2)
    
 <img width="495" height="89" alt="vmware_LJodWA3oER" src="https://github.com/user-attachments/assets/fabbe3c5-3fe7-4a48-af0a-ab2558a9abc2" />
+
 fig.2
 
 The "Why": Default Windows Event Viewer lacks the context required for deep incident response. Adding Sysmon exposes process lineage, command-line arguments, and process hollowing indicators (such as Event ID 1: Process Creation, or Event ID 3: Network Connection) directly into our SIEM engine.
@@ -65,13 +59,19 @@ Implementation: Configured a virtualized pfSense instance acting as the primary 
  - Assigned interfaces - WAN configure DHCP - LAN static ip 192.168.2.2/24
  - I Logged in the interface using pfsense ip - enabled remote logging and added wazuh's server ip under remote syslog servers to port 514 (logged catagories System, Firewall, VPN, DHCP, DNS).
  - Once completed, I integrated pfsense with wazuh on the wazuh manager in the ossec.conf file ( see fig. 3)
+
   <img width="350" height="158" alt="vmware_rX483X9So8" src="https://github.com/user-attachments/assets/946959bb-2377-4802-8208-108e6b29e821" />
+  
   Fig 3.
 
  - Once integrated I created a custom decoder to extract key fields (see fig.4) and custom rule (see Fig.5) to assign severity levels
+
 <img width="1001" height="259" alt="vmware_A9Nw2dU9oL" src="https://github.com/user-attachments/assets/23cb6ef2-022b-4917-ae8f-fb3c006ee645" />
+
 Fig. 4
+
 <img width="795" height="646" alt="vmware_riNNBs1naV" src="https://github.com/user-attachments/assets/f5cabb30-b5df-4b97-a69e-82fd5a2ed7f2" />
+
 Fig. 5
 
 The "Why": Endpoints only tell half the story. If a malicious asset initiates external command-and-control (C2) communications, or attempts internal network pivoting, the boundary firewall captures the raw packet metadata long before the host endpoint flags the action.
@@ -83,12 +83,19 @@ Implementation: Installed Suricata as a local host-based agent on the Windows ta
  - I downloaded Suricata on windows agent from thier website.
  - Once Downloaded I headed over to npcap.com, since suricata requires npcap to capture network traffic. ( enable api-compatible and enable start up at boot during download)
  - After npcap was finished I went into the Suricata yaml file to add rules ( see fig. 6 ) and Enable JSON logging ( see fig. 7)
- - <img width="191" height="55" alt="vmware_QUaRFm6r3D" src="https://github.com/user-attachments/assets/e9e4b4aa-3f53-49ab-b49f-32cd26f8ea38" />
+
+<img width="191" height="55" alt="vmware_QUaRFm6r3D" src="https://github.com/user-attachments/assets/e9e4b4aa-3f53-49ab-b49f-32cd26f8ea38" />
+
  Fig. 6
+
 <img width="569" height="96" alt="vmware_2AotRpYQPG" src="https://github.com/user-attachments/assets/9e1006c1-10ec-451e-9ce4-0ed846d8475b" />
+
  Fig. 7
+ 
  - Once I was completed, I then integrated it to Wazuh Agent in .conf file.( see fig. 8 )
+
 <img width="545" height="81" alt="vmware_DVw6OWLr94" src="https://github.com/user-attachments/assets/ed315e24-31d5-4c30-9c95-46e097e67c22" />
+
 Fig. 8
 
 The "Why": This establishes a hybrid defensive strategy. While Sysmon catches anomalous behavior on the system, Suricata monitors the network wires for known malicious signatures, providing defense-in-depth at the endpoint level.
@@ -98,28 +105,43 @@ Objective: Automate threat validation workflows and implement real-time File Int
 
 Implementation: Modified the Wazuh Manager global configuration file to establish an active-response integration with the VirusTotal API. When the endpoint detects a file creation event, the file's SHA256 hash is programmatically extracted, passed via API, and matched against the global database.
  - I went over to VirusTotal and got my API key and then I integrated VirusTotal with the Wazuh manager in the ossec.conf File. (see fig. 9)
+
 <img width="725" height="97" alt="vmware_x0VS0y5mya" src="https://github.com/user-attachments/assets/de5ddc7e-a7b3-4238-8fcc-4ba6d7ba74e0" />
+
 Fig. 9
+
  - Once completed I then went to the Wazuh Agent and created a folder of sensititive data for File Integrity Monitoring and a Folder for VirusTotal to test suspicious files.
  - Once folders were created, I edited the Wazuh Agent's .conf file to configure it to the Wazuh manager. (see fig. 10)
+
 <img width="921" height="44" alt="vmware_CVMqgg5pFY" src="https://github.com/user-attachments/assets/4133d340-7cb4-4bf5-9598-34f06632a9e7" />
+
 Fig. 10
+
  - Once Completed I created and modified sample txt file (see fig. 11) and downloaded malware from TheZoo Repository and put it in the VirusTotal folder (see fig. 12) to generate alerts in the SIEM.
+
 <img width="1822" height="149" alt="vmware_gD1yCOjKf9" src="https://github.com/user-attachments/assets/e8fa173a-bb25-4c58-afce-e022e425df36" />
+
 Fig. 11
+
 <img width="1826" height="169" alt="vmware_YcAAY8Qfq6" src="https://github.com/user-attachments/assets/7a814337-f993-4237-96df-29a55099d1b5" />
+
 Fig. 12
 
 The "Why": Security teams cannot manually triage every unknown file hash. Automating lookup rules allows the SIEM to instantly escalate alerts to Critical or High severity if a running process matches a known malicious entity in the wild.
 
 Step 6. Attcking The Windows Vivtim
  - Used Kali Linux to launch a brute Force Attack against victim vm. (see fig. 13)
+
 <img width="994" height="798" alt="vmware_1fvH3Vr08f" src="https://github.com/user-attachments/assets/a1b04085-db32-44e3-9269-d78cea6a70ee" />
+
 Fig. 13
 
  - Watched Wazuh to Detect and Analyze Alerts. (see fig. 14)
+
 <img width="1827" height="728" alt="vmware_hcQBESjbeV" src="https://github.com/user-attachments/assets/dcbeeba0-a88e-4e82-a655-c4775207489f" />
+
 <img width="1799" height="543" alt="vmware_8CY8GfgPyu" src="https://github.com/user-attachments/assets/a53cdc24-70ba-45b4-b4c5-98e5563b33df" />
+
 Fig. 14
 
 
